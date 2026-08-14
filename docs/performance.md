@@ -30,6 +30,7 @@ Measured on 2026-08-14 against the exact Compose image identified below. This is
 |---|---|
 | Host | Windows NT 10.0.26200, x64, 12 logical processors |
 | Runtime | Docker Engine 29.3.1, Linux containers |
+| Source commit | `cf92cb2` |
 | API image | `sha256:2c6d452346f8195b736741463b9135bb60f25e4e24b6af1a7de170ca16c6bb04` |
 | Dataset | Six seeded provider profiles with credentials, checklists, comments, audit events, and shifts |
 | Scenario | 20 constant VUs for 30 seconds; one authenticated dashboard read and one queue read per iteration |
