@@ -1,0 +1,49 @@
+@baseUrl = http://localhost:5080
+@email = specialist@careops.local
+@password = CareOps-Demo-2026!
+
+### Liveness
+GET {{baseUrl}}/health/live
+
+### Sign in (copy accessToken into token below)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+@token = paste-access-token-here
+
+### Current user
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{token}}
+
+### Operations dashboard
+GET {{baseUrl}}/api/dashboard
+Authorization: Bearer {{token}}
+
+### SLA-prioritized queue
+GET {{baseUrl}}/api/providers?status=UnderReview&page=1&pageSize=25
+Authorization: Bearer {{token}}
+
+### Provider detail
+@providerId = paste-provider-id-here
+GET {{baseUrl}}/api/providers/{{providerId}}
+Authorization: Bearer {{token}}
+
+### Transition workflow
+POST {{baseUrl}}/api/providers/{{providerId}}/transition
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "NeedsInformation",
+  "reason": "Please provide an updated declarations page."
+}
+
+### Upcoming coverage
+GET {{baseUrl}}/api/schedule/shifts
+Authorization: Bearer {{token}}

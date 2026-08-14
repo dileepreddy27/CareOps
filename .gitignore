@@ -1,0 +1,36 @@
+# .NET
+**/bin/
+**/obj/
+TestResults/
+coverage/
+*.user
+*.suo
+
+# Frontend
+**/node_modules/
+src/CareOps.Api/wwwroot/
+src/CareOps.Web/dist/
+*.tsbuildinfo
+
+# Local tools and workspace scratch
+work/
+outputs/
+.vs/
+.idea/
+.vscode/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+**/secrets.json
+*.pfx
+*.pem
+*.key
+
+# Logs / OS
+logs/
+*.log
+.DS_Store
+Thumbs.db

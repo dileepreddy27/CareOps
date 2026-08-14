@@ -1,0 +1,13 @@
+**/bin
+**/obj
+**/node_modules
+src/CareOps.Api/wwwroot
+work
+outputs
+.git
+.github
+.env
+TestResults
+coverage
+README.md
+docs

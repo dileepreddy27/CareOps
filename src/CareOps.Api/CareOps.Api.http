@@ -1,0 +1,6 @@
+@CareOps.Api_HostAddress = http://localhost:5082
+
+GET {{CareOps.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
