@@ -1,21 +1,28 @@
-# CareOps
+# CareOps | ASP.NET Core Healthcare Operations Platform
 
-**Real-time provider credentialing, compliance, and coverage operations—built as a production-minded .NET full-stack portfolio project.**
+[![CI](https://github.com/dileepreddy27/CareOps/actions/workflows/ci.yml/badge.svg)](https://github.com/dileepreddy27/CareOps/actions/workflows/ci.yml)
 
-CareOps gives healthcare workforce teams one place to move providers from intake to approval, watch expiring credentials and SLA risk, coordinate coverage shifts, and retain an audit-ready decision trail. The repository demonstrates modern C#/.NET engineering across domain modeling, secure APIs, PostgreSQL persistence, background work, realtime updates, React, automated testing, containers, and CI.
+Provider onboarding and credential review are often split across forms, spreadsheets, email, and scheduling tools. CareOps brings those steps into one synthetic-data workflow: provider profiles, credential metadata, verification checklists, review queues, expiration signals, decisions, and coverage shifts.
 
-> This is synthetic portfolio software, not a certified medical or credentialing system. It contains no real provider documents or protected health information.
+The project is a modular .NET monolith with an ASP.NET Core API, application and domain layers, EF Core persistence in PostgreSQL, a background compliance worker, authenticated SignalR updates, and a React + TypeScript client. It is designed to demonstrate full-stack C#/.NET engineering—not to represent a deployed healthcare or credentialing product.
 
-## What this project proves
+> **Scope:** This public portfolio project uses synthetic records and metadata only. It is not certified for healthcare use, does not claim regulatory compliance, and contains no real provider documents or protected health information.
 
-- A guarded workflow state machine for `Draft → Submitted → UnderReview → NeedsInformation → Approved → Suspended / Expired`, with invalid transitions rejected in the domain layer.
-- ASP.NET Core Identity, short-lived JWTs, lockout, and distinct provider, credentialing specialist, manager, and administrator authorization boundaries.
-- EF Core 10 + PostgreSQL with a committed migration, indexed queue projections, optimistic concurrency, retries, and deterministic demo seeding.
-- An idempotent compliance worker for 30/7-day expiration alerts, SLA escalation, automatic expiry, and retry-safe deduplication.
-- SignalR workflow, notification, and shift events consumed by a responsive React 19 + TypeScript operations UI.
-- Metadata-only credential handling with filename normalization, content-type/size validation, SHA-256 integrity fields, and opaque storage keys.
-- xUnit + FluentAssertions domain coverage and HTTP tests against real PostgreSQL using Testcontainers.
-- A non-root multi-stage container, Docker Compose health checks, locked dependencies, OpenAPI, Serilog, OpenTelemetry, and GitHub Actions.
+## Verified capabilities
+
+- **Credentialing workflow invariants:** 7 domain tests cover credential requirements, business-day SLAs, invalid transition rejection, approval gates, audit events, expiration, and filename normalization.
+- **Role-scoped provider access:** 3 HTTP integration tests run against a disposable PostgreSQL Testcontainer and verify database readiness, anonymous dashboard rejection, provider registration, own-profile access, the string-enum API contract, and denial of provider access to operational KPIs.
+- **Coverage scheduling rules:** 3 domain tests verify positive shift duration and ensure only the offered provider can confirm a shift.
+
+## Technology stack
+
+| Layer | Technologies |
+|---|---|
+| Backend | .NET 10 LTS, C# 14, ASP.NET Core 10 Minimal APIs, FluentValidation, OpenAPI |
+| Data and identity | EF Core 10, PostgreSQL 17, ASP.NET Core Identity, JWT role authorization |
+| Realtime and operations | SignalR, hosted background worker, Serilog, OpenTelemetry |
+| Frontend | React 19, TypeScript, Vite |
+| Verification and delivery | xUnit, FluentAssertions, Testcontainers, k6, Docker Compose, GitHub Actions |
 
 ## Architecture at a glance
 
@@ -31,13 +38,13 @@ flowchart LR
 
 The backend is a modular monolith: one reliable transaction boundary, explicit inward dependencies, and extraction seams without premature distributed-system cost. See [the architecture guide](docs/architecture.md) and the [ADRs](docs/adr).
 
-## Run it
+## Setup and run
 
 Prerequisites: Docker Desktop or Docker Engine with Compose.
 
 ```bash
-git clone <your-repository-url>
-cd careops
+git clone https://github.com/dileepreddy27/CareOps.git
+cd CareOps
 cp .env.example .env        # PowerShell: Copy-Item .env.example .env
 docker compose up --build
 ```
@@ -128,7 +135,11 @@ OpenAPI JSON is available at `/openapi/v1.json`. Runnable examples live in [`htt
 
 Errors use RFC 9457-style problem details with a trace identifier. FluentValidation returns field-level `400` responses; domain conflicts return `409`; ownership/policy failures return `403`.
 
-## Build and test
+## Verification evidence
+
+The published workflow performs a locked .NET restore, warning-free Release build, all 13 tests, PostgreSQL-backed integration coverage, idempotent migration-script generation, frontend lint/build, and a multi-stage container build. The current result is visible in the [GitHub Actions workflow](https://github.com/dileepreddy27/CareOps/actions/workflows/ci.yml).
+
+Run the same core checks locally:
 
 ```bash
 dotnet restore CareOps.sln --locked-mode
